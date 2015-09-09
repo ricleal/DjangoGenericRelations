@@ -13,14 +13,14 @@ class GenericTestCase(TestCase):
         scan21 = Scan.objects.create(name="Scan 1 of Reduction 2", reduction=reduction2)
         scan22 = Scan.objects.create(name="Scan 2 of Reduction 2", reduction=reduction2)
 
-        Job.objects.create(content_object=reduction1, status = 'UNKNOWN')
-        Job.objects.create(content_object=scan21, status = 'UNKNOWN')
-        Job.objects.create(content_object=scan22, status = 'UNKNOWN')
+        Job.objects.create(content_object=reduction1)
+        Job.objects.create(content_object=scan21)
+        Job.objects.create(content_object=scan22)
 
     def test_generic(self):
         jobs = Job.objects.all()
         for job in jobs:
-            print job.content_object, ":",job.content_type
+            print job, job.content_object, ":",job.content_type
             self.assertTrue( str(job.content_type) in ['scan','reduction'])
 
     def test_from_related(self):

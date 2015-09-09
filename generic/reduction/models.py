@@ -11,18 +11,24 @@ class Job(models.Model):
 
     https://docs.djangoproject.com/en/1.8/ref/contrib/contenttypes/#generic-relations
     '''
-    STATUS = (('RUNNING', 'RUNNING'),
-        ('QUEUED', 'QUEUED'),
-        ('COMPLETED', 'COMPLETED'),
-        ('REMOVED', 'REMOVED'),
-        ('DEFERRED', 'DEFERRED'),
-        ('IDLE', 'IDLE'),
-        ('UNKNOWN', 'UNKNOWN'))
+    STATUS = (
+        ('NOT_SUBMITED', 'Not Submited'),
+        ('RUNNING', 'Running'),
+        ('QUEUED', 'Queued'),
+        ('COMPLETED', 'Completed'),
+        ('REMOVED', 'Removed'),
+        ('DEFERRED', 'Deferred'),
+        ('IDLE', 'Idle'),
+        ('UNKNOWN', 'Unknown')
+    )
 
-    status = models.CharField(choices=STATUS, max_length=20)
+    status = models.CharField(choices=STATUS, max_length=30, default='NOT_SUBMITED')
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
+
+    def __str__(self):
+        return 'id=%s ; status=%s' % (self.id, self.status)
 
 class Reduction(models.Model):
     name = models.CharField(max_length=50)
