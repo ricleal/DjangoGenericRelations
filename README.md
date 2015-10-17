@@ -26,3 +26,27 @@ Note to have reverse generic relations, on the models for which the FK is PK, we
 reduction/models.py
 reduction/test.py
 ```
+## Django-environ
+
+The ```.env``` file is in the repository for info.
+Never ever push it upstream!!!
+
+## Instalation:
+
+```
+virtualenv env
+source env/bin/activate
+./env/bin/pip install -Ur requirements.txt
+# if needed:
+./manage.py migrate
+```
+
+Run the tests:
+```
+./manage.py test
+```
+
+Tests are here:
+```
+generic/reduction/tests.py
+```
