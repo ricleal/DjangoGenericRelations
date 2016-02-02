@@ -23,7 +23,7 @@ class Job(models.Model):
     )
 
     status = models.CharField(choices=STATUS, max_length=30, default='NOT_SUBMITED')
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
@@ -36,9 +36,15 @@ class Reduction(models.Model):
     # default. Setting related_query_name creates a relation from the related
     # object back to this one. This allows querying and filtering from the
     # related object.
-    job = GenericRelation(Job, related_query_name='job')
+    job = GenericRelation(Job, related_query_name="reductions",)
+
+    def __str__(self):
+        return '%s'%self.name
 
 class Scan(models.Model):
     reduction = models.ForeignKey(Reduction)
     name = models.CharField(max_length=100)
-    job = GenericRelation(Job, related_query_name='job')
+    job = GenericRelation(Job, related_query_name="scans",)
+
+    def __str__(self):
+        return '%s'%self.name

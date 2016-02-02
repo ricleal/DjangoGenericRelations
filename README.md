@@ -50,3 +50,8 @@ Tests are here:
 ```
 generic/reduction/tests.py
 ```
+
+## Admin
+```
+python manage.py createsuperuserpython manage.py createsuperuser
+```
