@@ -73,9 +73,11 @@ class GenericTestCase(TestCase):
         from django.contrib.contenttypes.models import ContentType
         scan_content_type = ContentType.objects.get(app_label="reduction", model="scan")
 
+        # if needed:  scan_content_type.model_class() # out: generic.reduction.models.Scan
+
         # test if the object from content type matches the created object
         self.assertEqual(scan_content_type.get_object_for_this_type(id = scan.pk),scan)
-        
+
         scan_job = Job.objects.create(content_type=scan_content_type, object_id=scan.pk, status='QUEUED')
         self.assertEqual(scan_job.content_object,scan)
         # Get job using scan name
