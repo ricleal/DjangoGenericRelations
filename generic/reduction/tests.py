@@ -52,8 +52,8 @@ class GenericTestCase(TestCase):
         reduction = Reduction.objects.create(name="Reduction Specific")
         scan = Scan.objects.create(name="Scan Specific of Reduction Specific", reduction=reduction)
 
-        Job.objects.create(content_object=reduction)
-        Job.objects.create(content_object=scan)
+        Job.objects.create(content_object=reduction, status='QUEUED')
+        Job.objects.create(content_object=scan, status='DEFERRED')
 
         # This fail!
         # this_scan = Job.objects.get(content_object = scan)
@@ -64,3 +64,20 @@ class GenericTestCase(TestCase):
 
         job_for_this_reduction = Job.objects.get(reductions__name = "Reduction Specific")
         self.assertEqual(job_for_this_reduction.content_object,reduction)
+
+    def test_create_job_from_values(self):
+        reduction = Reduction.objects.create(name="Reduction 123")
+        scan = Scan.objects.create(name="Scan 1 of Reduction 123", reduction=reduction)
+
+        # Create job using content type
+        from django.contrib.contenttypes.models import ContentType
+        scan_content_type = ContentType.objects.get(app_label="reduction", model="scan")
+
+        # test if the object from content type matches the created object
+        self.assertEqual(scan_content_type.get_object_for_this_type(id = scan.pk),scan)
+        
+        scan_job = Job.objects.create(content_type=scan_content_type, object_id=scan.pk, status='QUEUED')
+        self.assertEqual(scan_job.content_object,scan)
+        # Get job using scan name
+        scan_job = Job.objects.get(scans__name = "Scan 1 of Reduction 123")
+        self.assertEqual(scan_job.content_object,scan)
